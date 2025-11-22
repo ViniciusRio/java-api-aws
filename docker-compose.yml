@@ -1,0 +1,28 @@
+version: '3'
+services:
+  my-sql-server:
+    container_name: my-sql-server
+    image: midejoe/java-api:mysql
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  java-crud-app:
+    container_name: java_api
+    image: java-crud-app:latest
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_URL=jdbc:mysql://my-sql-server:3306/store_database
+      - DATABASE_USERNAME=dbuser
+      - DATABASE_PASSWORD=@YourPassword#
+    depends_on:
+      my-sql-server:
+        condition: service_healthy
+
+  

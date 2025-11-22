@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Java",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
