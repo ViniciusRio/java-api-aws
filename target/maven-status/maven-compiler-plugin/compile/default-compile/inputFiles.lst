@@ -1,8 +1,0 @@
-/app/src/main/java/com/joesalt/tutorial/exception/GlobalExceptionHandler.java
-/app/src/main/java/com/joesalt/tutorial/model/Product.java
-/app/src/main/java/com/joesalt/tutorial/controller/HealthController.java
-/app/src/main/java/com/joesalt/tutorial/TutorialApplication.java
-/app/src/main/java/com/joesalt/tutorial/exception/ProductNotFoundException.java
-/app/src/main/java/com/joesalt/tutorial/controller/ProductController.java
-/app/src/main/java/com/joesalt/tutorial/service/ProductService.java
-/app/src/main/java/com/joesalt/tutorial/repository/ProductRepository.java
