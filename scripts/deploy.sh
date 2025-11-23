@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # Diretório base do projeto (Onde está o pom.xml e o docker-compose.yml)
-PROJECT_DIR="/home/ec2-user/java-api-aws"
-# Diretório onde o JAR compilado deve ser colocado
+PROJECT_DIR=$(pwd) # Obtém o diretório atual # Diretório onde o JAR compilado deve ser colocado
 JAR_TARGET_DIR="$PROJECT_DIR/target"
 
 # --- 1. INSTALAÇÃO DE DEPENDÊNCIAS (Amazon Linux 2023 usa dnf/yum) ---
