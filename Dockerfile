@@ -1,6 +1,5 @@
 # Use the official Eclipse Temurin base image with Java 17
-FROM eclipse-temurin:17-jdk-alpine
-
+FROM eclipse-temurin:17-jdk
 # Copy the JAR file into the container
 COPY target/crud-v1.jar crud-v1.jar
 

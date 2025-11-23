@@ -14,6 +14,7 @@ services:
   java-crud-app:
     container_name: java_api
     image: java-crud-app:latest
+    build: . 
     ports:
       - 8080:8080
     environment:
@@ -23,5 +24,3 @@ services:
     depends_on:
       my-sql-server:
         condition: service_healthy
-
-  
