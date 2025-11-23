@@ -1,0 +1,32 @@
+# Arquivos de Build do Maven
+# A pasta "target" é sempre gerada pelo build e nunca deve ser rastreada.
+target/
+
+# Arquivos de IDE (VS Code)
+# Diretório de metadados do VS Code.
+.vscode/
+
+# Arquivos de Sistema Operacional (macOS)
+# Arquivos de metadados do Mac
+.DS_Store
+
+# Logs
+# Logs são arquivos temporários e específicos da execução local.
+*.log
+log/
+logs/
+
+# Java Class Files
+# Arquivos de classe compilados, que também estariam em target/
+*.class
+
+# Maven Wrappers
+# Mantenha o mvnw (o script), mas ignore os logs ou pastas de cache.
+.mvn/wrapper/maven-wrapper.jar
+
+# Docker
+# Arquivos que podem conter dados confidenciais ou de build temporário
+*.swp
+*.bak
+.env
+.env.*
