@@ -17,10 +17,8 @@ services:
     build: . 
     ports:
       - 8080:8080
-    environment:
-      - DATABASE_URL=jdbc:mysql://my-sql-server:3306/store_database
-      - DATABASE_USERNAME=dbuser
-      - DATABASE_PASSWORD=@YourPassword#
+    env_file:
+      - .env
     depends_on:
       my-sql-server:
         condition: service_healthy
