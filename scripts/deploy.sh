@@ -42,6 +42,11 @@ if ! sudo command -v docker-compose &> /dev/null; then
     echo "Docker Compose V2 instalado manualmente em /usr/local/bin."
 fi
 
+echo "Garantindo que o Buildx esteja atualizado..."
+# Este comando força a atualização ou instalação do plugin Buildx.
+sudo docker buildx install
+# ----------------------------------------------------
+
 # 1.3. Instalar JDK 17 (Necessário para o Maven compilar o JAR na EC2)
 # Verifica se o compilador Java (javac) está disponível.
 if ! command -v javac &> /dev/null || [[ "$(javac -version 2>&1)" != *"17."* ]]; then
