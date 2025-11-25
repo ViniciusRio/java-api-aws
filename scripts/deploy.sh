@@ -1,29 +1,37 @@
 #!/usr/bin/env bash
 
-# Diretório base do projeto (Onde está o pom.xml e o docker-compose.yml)
+# Define o diretório raiz do projeto e navega para ele
 PROJECT_DIR="/app/java-api-aws" 
-cd $PROJECT_DIR # <--- ADICIONE ESTA LINHA para garantir que o diretório de trabalho seja o correto.
-# -----------------------------
+cd $PROJECT_DIR 
 
 JAR_TARGET_DIR="$PROJECT_DIR/target"
 
 # --- 1. INSTALAÇÃO DE DEPENDÊNCIAS (Amazon Linux 2023 usa dnf/yum) ---
-echo "Verificando e instalando Docker e ferramentas..."
+echo "Verificando e instalando Docker, Java e ferramentas..."
 
-# Instalar Docker
+# 1.1. Instalar Docker
 if ! command -v docker &> /dev/null; then
   echo "Instalando Docker Engine..."
-  sudo dnf install -y docker # Usando dnf, padrão no AL2023
+  sudo dnf install -y docker
   sudo systemctl start docker
   sudo systemctl enable docker
-  sudo usermod -aG docker ec2-user # Adiciona o usuário atual ao grupo docker
-  # REINICIE A SESSÃO se o usermod for executado (pode ser necessário sair e entrar)
+  # Adiciona o usuário atual ao grupo docker (necessita de nova sessão para efeito)
+  sudo usermod -aG docker ec2-user 
 fi
 
-# Instalar Docker Compose V2 (vem como plugin no AL2023)
+# 1.2. Instalar Docker Compose V2
 if ! command -v docker compose &> /dev/null; then
   echo "Instalando Docker Compose Plugin (V2)..."
   sudo dnf install -y docker-compose-plugin
+fi
+
+# 1.3. Instalar JDK 17 (Necessário para o Maven compilar o JAR na EC2)
+# Verifica se o compilador Java (javac) está disponível.
+if ! command -v javac &> /dev/null || [[ "$(javac -version 2>&1)" != *"17."* ]]; then
+  echo "Instalando JDK 17 Amazon Corretto..."
+  sudo dnf install java-17-amazon-corretto -y
+else
+  echo "JDK (javac) já está instalado e configurado."
 fi
 
 # Aguarda um momento para garantir que o serviço Docker iniciou
@@ -31,10 +39,9 @@ sleep 5
 
 # --- 2. PREPARAÇÃO DA APLICAÇÃO JAVA ---
 echo "Compilando e empacotando a aplicação Java (Maven)..."
-cd $PROJECT_DIR
+# O comando './mvnw' é executado no diretório $PROJECT_DIR
 
 # Limpar e empacotar (isso cria o crud-v1.jar em target/)
-# Usando o wrapper do Maven
 ./mvnw clean package -DskipTests
 
 # Verifica se o JAR foi criado antes de prosseguir com o Docker
@@ -45,6 +52,6 @@ fi
 
 # --- 3. BUILD E DEPLOY DO DOCKER ---
 echo "Executando o script de build e deploy..."
-# Adaptação dos scripts do Node para o Java
+# Os scripts production-build.sh e production-up.sh devem estar no $PROJECT_DIR
 ./production-build.sh
 ./production-up.sh
