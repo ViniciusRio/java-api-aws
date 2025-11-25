@@ -8,4 +8,4 @@ echo "Iniciando contêineres Docker..."
 # 2. Subir o MySQL (aguardando o healthcheck, graças ao depends_on).
 # 3. Subir a aplicação Java.
 # Certifique-se de que seu docker-compose.yml esteja correto e no diretório raiz.
-sudo docker compose up -d
+sudo sudo docker-compose up -d
