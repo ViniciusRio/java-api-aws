@@ -34,25 +34,30 @@ fi
 
 # Aguarda um momento para garantir que o serviço Docker iniciou
 sleep 5
+# ... (Seção 2.1)
 
 # 2.1. CORREÇÃO AUTOMÁTICA DO MAVEN WRAPPER 
-# Se a pasta .mvn/wrapper/ não existir (causa do erro anterior), recria.
 if [[ ! -d ".mvn/wrapper" ]]; then
   echo "AVISO: Pasta .mvn/wrapper ausente. Tentando recriar a estrutura do Maven..."
   
   # Cria a estrutura de pastas
   mkdir -p .mvn/wrapper
   
-  # Baixa o JAR do Maven Wrapper diretamente (usando o link padrão da Apache Maven)
-  # A URL pode variar, mas este é o link direto para o wrapper.jar
+  # Baixa o JAR do Maven Wrapper diretamente
   WRAPPER_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
   echo "Baixando maven-wrapper.jar..."
   curl -L $WRAPPER_URL -o .mvn/wrapper/maven-wrapper.jar
   
-  # NOTA: O arquivo maven-wrapper.properties (que define a versão do Maven)
-  # precisa ser copiado manualmente ou criado se não estiver no repositório.
-  # Se o projeto NÃO tem esse arquivo no Git, o script precisaria criá-lo aqui.
-  # Assumimos que o .properties foi copiado manualmente ou está no Git.
+  # *** ADICIONE ESTE BLOCO ***
+  # Cria o arquivo maven-wrapper.properties (define a versão do Maven a ser baixada)
+  PROPERTIES_FILE=".mvn/wrapper/maven-wrapper.properties"
+  echo "Criando arquivo de propriedades do Maven ($PROPERTIES_FILE)..."
+  
+  # Define a URL de download para uma versão estável e compatível com Java 17 (e Spring Boot 3)
+  cat > $PROPERTIES_FILE << EOF
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.8.7/apache-maven-3.8.7-bin.zip
+EOF
+  # ****************************
 fi
 
 # --- 2. PREPARAÇÃO DA APLICAÇÃO JAVA ---
