@@ -34,31 +34,34 @@ fi
 
 # Aguarda um momento para garantir que o serviço Docker iniciou
 sleep 5
-# ... (Seção 2.1)
 
 # 2.1. CORREÇÃO AUTOMÁTICA DO MAVEN WRAPPER 
-if [[ ! -d ".mvn/wrapper" ]]; then
-  echo "AVISO: Pasta .mvn/wrapper ausente. Tentando recriar a estrutura do Maven..."
+# Usaremos '|| true' para garantir que o script continue se o 'if' falhar.
+
+echo "Verificando e corrigindo estrutura do Maven Wrapper..."
+
+# 1. Cria o diretório (se não existir)
+mkdir -p .mvn/wrapper || true
   
-  # Cria a estrutura de pastas
-  mkdir -p .mvn/wrapper
-  
-  # Baixa o JAR do Maven Wrapper diretamente
+# 2. Baixa o JAR do Wrapper (se não existir)
+WRAPPER_JAR=".mvn/wrapper/maven-wrapper.jar"
+if [[ ! -f "$WRAPPER_JAR" ]]; then
+  echo "AVISO: Baixando maven-wrapper.jar..."
   WRAPPER_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
-  echo "Baixando maven-wrapper.jar..."
-  curl -L $WRAPPER_URL -o .mvn/wrapper/maven-wrapper.jar
-  
-  # *** ADICIONE ESTE BLOCO ***
-  # Cria o arquivo maven-wrapper.properties (define a versão do Maven a ser baixada)
-  PROPERTIES_FILE=".mvn/wrapper/maven-wrapper.properties"
-  echo "Criando arquivo de propriedades do Maven ($PROPERTIES_FILE)..."
-  
-  # Define a URL de download para uma versão estável e compatível com Java 17 (e Spring Boot 3)
-  cat > $PROPERTIES_FILE << EOF
-distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.8.7/apache-maven-3.8.7-bin.zip
-EOF
-  # ****************************
+  curl -L $WRAPPER_URL -o "$WRAPPER_JAR"
 fi
+
+# 3. CRIA O ARQUIVO DE PROPRIEDADES FALTANTE (Chave para a solução)
+PROPERTIES_FILE=".mvn/wrapper/maven-wrapper.properties"
+if [[ ! -f "$PROPERTIES_FILE" ]]; then
+  echo "AVISO: Criando arquivo de propriedades faltante ($PROPERTIES_FILE)..."
+  
+  # Cria o arquivo com a URL de download do Maven 3.8.7
+  echo "distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.8.7/apache-maven-3.8.7-bin.zip" > $PROPERTIES_FILE
+fi
+  
+# 4. Garante permissão de execução (Caso o deploy remova)
+chmod +x ./mvnw
 
 # --- 2. PREPARAÇÃO DA APLICAÇÃO JAVA ---
 echo "Compilando e empacotando a aplicação Java (Maven)..."
