@@ -23,6 +23,25 @@ if ! command -v docker compose &> /dev/null; then
   sudo dnf install -y docker-compose-plugin
 fi
 
+# Verifica se o comando 'docker-compose' V1 (que o sudo costuma reconhecer) existe
+if ! sudo command -v docker-compose &> /dev/null; then
+    echo "AVISO: Plugin Docker Compose V2 não encontrado no PATH. Instalando binário V2 manualmente..."
+    
+    # Define o caminho de instalação universal
+    COMPOSE_DESTINATION="/usr/local/bin/docker-compose"
+    
+    # Baixa a última versão estável do Compose V2
+    sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o $COMPOSE_DESTINATION
+    
+    # Garante permissão de execução
+    sudo chmod +x $COMPOSE_DESTINATION
+    
+    # Cria um link simbólico para a sintaxe V1, caso o V2 não seja reconhecido
+    sudo ln -s $COMPOSE_DESTINATION /usr/bin/docker-compose
+    
+    echo "Docker Compose V2 instalado manualmente em /usr/local/bin."
+fi
+
 # 1.3. Instalar JDK 17 (Necessário para o Maven compilar o JAR na EC2)
 # Verifica se o compilador Java (javac) está disponível.
 if ! command -v javac &> /dev/null || [[ "$(javac -version 2>&1)" != *"17."* ]]; then
