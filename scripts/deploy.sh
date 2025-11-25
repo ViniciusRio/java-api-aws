@@ -75,9 +75,9 @@ if [[ ! -f "$JAR_TARGET_DIR/crud-v1.jar" ]]; then
   echo "ERRO: O arquivo JAR não foi encontrado em $JAR_TARGET_DIR/crud-v1.jar. O build falhou."
   exit 1
 fi
-
+chmod +x ./scripts/*.sh
 # --- 3. BUILD E DEPLOY DO DOCKER ---
 echo "Executando o script de build e deploy..."
-# Os scripts production-build.sh e production-up.sh devem estar no $PROJECT_DIR
-./production-build.sh
-./production-up.sh
+# Adaptação dos scripts do Node para o Java
+./scripts/production-build.sh  # <-- CORREÇÃO: ADICIONAR './scripts/'
+./scripts/production-up.sh     # <-- CORREÇÃO: ADICIONAR './scripts/'
