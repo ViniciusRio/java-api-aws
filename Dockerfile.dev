@@ -1,0 +1,21 @@
+# Use the official Eclipse Temurin base image with Java 17
+FROM eclipse-temurin:17-jdk
+ARG JAR_FILE=target/crud-v1.jar
+ARG DEBUG_PORT=5005
+# Copy the JAR file into the container
+COPY ${JAR_FILE} crud-v1.jar
+
+# Expose application and debug ports
+EXPOSE 8080
+EXPOSE ${DEBUG_PORT}
+
+# Enable remote debugging by default. You can override or unset `JAVA_TOOL_OPTIONS`
+# at runtime or build with `--build-arg DEBUG_PORT=<port>` to change the debug port.
+ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
+# Start the JVM. Note: the JVM automatically picks up `JAVA_TOOL_OPTIONS`,
+# so do NOT expand it on the command line (this would load the JDWP agent twice).
+# To disable debugging at runtime, unset or override `JAVA_TOOL_OPTIONS`:
+# `docker run -e JAVA_TOOL_OPTIONS="" -p 8080:8080 ...`
+ENTRYPOINT ["sh", "-c", "java -jar crud-v1.jar"]
+

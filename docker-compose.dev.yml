@@ -1,0 +1,29 @@
+services:
+  # my-sql-server:
+  #   container_name: my-sql-server
+  #   image: midejoe/java-api:mysql
+  #   ports:
+  #     - 3306:3306
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
+  #     interval: 5s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 30s
+
+  java-crud-app:
+    container_name: java_api
+    image: java-crud-app:latest
+    build: .
+    ports:
+      - 8080:8080
+      # Expose debug port for JDWP
+      - 5005:5005
+    env_file:
+      - .env
+    # Optional: override debug options at runtime (uncomment to use)
+    # environment:
+    #   - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    # depends_on:
+    #   my-sql-server:
+    #     condition: service_healthy
